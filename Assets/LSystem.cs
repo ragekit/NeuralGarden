@@ -37,18 +37,28 @@ public class LSystem : MonoBehaviour {
 
     struct DrawingState{
         public SimpleTransform transform;
-        public Vector3 RotationIncrement;
-        public Vector3 rotationValue;
+        public float thau;
+        public float phi;
+        public float thauIncrement;
+        public float phiIncrement;
     }
     DrawingState ds;
     Stack<DrawingState> saveStack;
 
 	// Use this for initialization
+
+    //F forward
+    //0 end
+    //[ ] push//pop
+    //t T increase thau - + by thauincrement
+    //p P increase phi - + by phiincrement
+    // / apply rotation
+
 	void Start () {
         rules = new Dictionary<char, string>();
-        rules.Add('F', "F");
-        rules.Add('0', "F[+F0][-F0][+F0][-F0]");
-        rules.Add('+', ")+");
+        rules.Add('0', "F/0");
+      //  rules.Add('F', "");
+      //  rules.Add('0', "F[F/tp0]");
 
         root = this.gameObject;
 
@@ -57,22 +67,10 @@ public class LSystem : MonoBehaviour {
 
         // StartCoroutine(cycle());
 
-
-        grow(3);
-        build();
     
-    }
-    IEnumerator cycle()
-    {
-        while (true)
-        {
-            grow();
-            clearScene();
-            build();
-            yield return new WaitForSeconds(1f);
-        }
-    }
 
+
+    }
     private void clearScene()
     {
         Destroy(root);
@@ -84,8 +82,11 @@ public class LSystem : MonoBehaviour {
     {
         ds.transform = new SimpleTransform();
         ds.transform.scale = new Vector3(1,1,1);
-        ds.RotationIncrement = new Vector3(20,0,20);
-        ds.rotationValue = new Vector3(20,0,20);
+        ds.thau = 2;
+        ds.phi = 0;
+
+        ds.thauIncrement = 10;
+        ds.phiIncrement = 10;
         saveStack.Clear();
 
 
@@ -105,8 +106,9 @@ public class LSystem : MonoBehaviour {
                 case 'F':
                     go = makeModule(branch);
                     ds.transform.AssignToGameObject(go);
+                    Debug.Log("///" + ds.transform.position);
                     ds.transform.position = go.transform.position + go.transform.up * go.transform.localScale.y;
-
+                    Debug.Log(ds.transform.position);
                     break;
                 case '[':
                     saveStack.Push(ds);
@@ -114,19 +116,26 @@ public class LSystem : MonoBehaviour {
                 case ']':
                     ds = saveStack.Pop();
                     break;
-                case '+':
-                    ds.transform.rotation.eulerAngles += ds.rotationValue;
+                case 'T':
+                    ds.thau += ds.thauIncrement;
                     break;
-                case '-':
-                    ds.transform.rotation.eulerAngles -= ds.rotationValue;
+                case 't':
+                    ds.thau -= ds.thauIncrement;
                     break;
-                case '(':
-                    ds.rotationValue += ds.RotationIncrement;
+                case 'P':
+                    ds.phi += ds.phiIncrement;
                     break;
-                case ')':
-                    ds.rotationValue -= ds.RotationIncrement;
+                case 'p':
+                    ds.phi -= ds.phiIncrement;
                     break;
+                case '/':
+                    
+                    Vector3 toward = MathUtil.ComputeCartesian(1,ds.thau,ds.phi);
+                    Debug.Log(ds.transform.position + MathUtil.ComputeCartesian(1,ds.thau,ds.phi));
+                   // ds.transform.rotation.SetLookRotation(ds.transform.position+Vector3.forward,ds.transform.position+toward);
+                break;
             }
+
         }
     }
 
@@ -176,6 +185,8 @@ public class LSystem : MonoBehaviour {
             state="0";
             clearScene();
             grow(5);
+            Debug.Log(state);
+            
             build();
         }
 	}
