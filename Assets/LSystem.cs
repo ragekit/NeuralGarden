@@ -175,7 +175,6 @@ public class LSystem : MonoBehaviour {
             }
             state = temp;
         }
-       Debug.Log(state);
     }
 
     public void Regenerate(){

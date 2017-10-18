@@ -103,5 +103,7 @@ public class Randomizer : MonoBehaviour {
 
 			dataText["data"].Add(plant);
 			File.WriteAllText(AssetDatabase.GetAssetPath(data),dataText.ToString(5));
+
+			Debug.Log(dataText["data"].Count);
 	}
 }
