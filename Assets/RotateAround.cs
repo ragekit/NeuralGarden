@@ -5,7 +5,6 @@ public class RotateAround : MonoBehaviour {
 
     // Use this for initialization
 
-   public Transform target;
     public float speed;
 	void Start () {
 	    
@@ -13,8 +12,7 @@ public class RotateAround : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.LookAt(target);
         //transform.Translate(Vector3.right * Time.deltaTime*speed);
-        transform.RotateAround(target.position, Vector3.up, Time.deltaTime * speed);
+        transform.RotateAround(GetComponent<FitToScreen>().BoundingBoxCenter, Vector3.up, Time.deltaTime * speed);
     }
 }
