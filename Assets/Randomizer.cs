@@ -14,6 +14,8 @@ public class Randomizer : MonoBehaviour {
 
 	JSONNode dataText;
 
+	private DrawingState startingPointDs;
+
 	void Start () {
 		system = GetComponent<LSystem>();
 		dataText = JSON.Parse(data.text);
@@ -30,10 +32,12 @@ public class Randomizer : MonoBehaviour {
 		system.iterations = Random.Range(1,5);
 
 
-
 		LSystem.variables.Random();
 
 		GenerateRules();
+
+		startingPointDs = system.ds;
+
 	}
 
 	void GenerateRules(){
@@ -88,10 +92,10 @@ public class Randomizer : MonoBehaviour {
 			JSONObject drawingData = new JSONObject();
 
 
-			drawingData.Add("thau",system.ds.thau);
-			drawingData.Add("phi",system.ds.phi);
-			drawingData.Add("thauIncrement",system.ds.thauIncrement);
-			drawingData.Add("phiIncrement",system.ds.phiIncrement);
+			drawingData.Add("thau",startingPointDs.thau);
+			drawingData.Add("phi",startingPointDs.phi);
+			drawingData.Add("thauIncrement",startingPointDs.thauIncrement);
+			drawingData.Add("phiIncrement",startingPointDs.phiIncrement);
 			plant.Add("iteration",system.iterations);
 			plant.Add("output",system.state);
 			plant.Add("drawingData",drawingData);
