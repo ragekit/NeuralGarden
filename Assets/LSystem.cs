@@ -84,6 +84,12 @@ public class LSystem : MonoBehaviour {
        // root.name = "root";
     }
 
+    public void BuildFromState(string st){
+        clearScene();
+		state = st;
+		build();
+    }
+
     private void build()
     {
        saveStack.Clear();
@@ -187,6 +193,8 @@ public class LSystem : MonoBehaviour {
 	void Update () {
       
 	}
+
+    
 
     public override string ToString(){
 
