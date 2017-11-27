@@ -23,11 +23,7 @@ public class LineReader : MonoBehaviour {
 	}
 
 	void Randomize(){
-		system.ds.Reset();
-		system.ds.thau = Random.Range(-180f,180f);
-		system.ds.phi = Random.Range(0f,360f);
-		system.ds.phiIncrement = Random.Range(-180f,180f);
-		system.ds.thauIncrement = Random.Range(-180f,180f);
+		
 		//system.iterations = Random.Range(1,5);
 
 

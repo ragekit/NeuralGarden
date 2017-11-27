@@ -14,7 +14,6 @@ public class FitToScreen : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Fit();
 	}
 
 	public void Fit(){
