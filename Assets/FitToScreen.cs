@@ -29,9 +29,17 @@ public class FitToScreen : MonoBehaviour {
 		Debug.DrawLine(main.ScreenToWorldPoint(new Vector3(r.max.x,r.max.y,2)),main.ScreenToWorldPoint(new Vector3(r.max.x,r.min.y,2)));
 		var worldToPixels = ((Screen.height / 2.0f) / Camera.main.orthographicSize);
 		BoundingBoxCenter = bb.center;
-		main.transform.LookAt(bb.center);
+
+		float stepBackRatio = 2;
+			main.transform.position = BoundingBoxCenter + new Vector3(1,1,0)*Mathf.Max(bb.extents.x,bb.extents.y,bb.extents.z)*2;
+			main.transform.LookAt(bb.center);
+			stepBackRatio += 2;
+		
+		
 		main.orthographicSize = (r.size.y/worldToPixels)/2 + CameraMargin;
 	}
+
+
 
 	Bounds GetCompoundBB(GameObject target){
 		var filters = target.GetComponentsInChildren<MeshRenderer>();
