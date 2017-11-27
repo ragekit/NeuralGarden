@@ -19,7 +19,10 @@ public class Randomizer : MonoBehaviour
     void Start()
     {
         system = GetComponent<LSystem>();
-        dataText = data.text;
+        dataText = JSON.Parse(data.text);
+        if(dataText == null){
+            dataText = new JSONObject();
+        }
         StartCoroutine(Testing());
     }
 
@@ -101,7 +104,7 @@ public class Randomizer : MonoBehaviour
             {
                 yield return null;
             }
-            //writeData(Input.GetKeyDown(KeyCode.Y) ? true : false);
+            writeData(Input.GetKeyDown(KeyCode.Y) ? true : false);
         }
     }
 
