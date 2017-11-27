@@ -40,7 +40,7 @@ public struct SimpleTransform
     }
 }
 
-public struct Module
+public class Module
 {
     public char symbol;
     public float[] parameters;
@@ -49,6 +49,16 @@ public struct Module
         this.symbol = symbol;
         parameters = new float[parameterLength];
     }
+
+    public Module(Module m){
+        symbol = m.symbol;
+        parameters = new float[m.parameters.Length];
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            parameters[i] = m.parameters[i];
+        }
+    }
+
     override public string ToString()
     {
         string ret = "";
@@ -127,6 +137,18 @@ public class LSystem : MonoBehaviour
         state = new List<Module>();
         root = this.gameObject;
         saveStack = new Stack<SimpleTransform>();
+    }
+
+    public void Reset(){
+      //  rules.Clear();
+       // state.Clear();
+    }
+
+       public void Regenerate()
+    {
+        clearScene();
+        grow(iterations);
+        build();
     }
     private void clearScene()
     {
@@ -231,12 +253,7 @@ public class LSystem : MonoBehaviour
         }
     }
 
-    public void Regenerate()
-    {
-        clearScene();
-        grow(iterations);
-        build();
-    }
+ 
 
     // Update is called once per frame
     void Update()

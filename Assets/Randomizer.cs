@@ -27,14 +27,21 @@ public class Randomizer : MonoBehaviour
     {
 
         system.iterations = Random.Range(2, 5);
-        GenerateRules();
+        
+        do
+        {
+            GenerateRules();
+        } while (!validate());
+
     }
 
     void GenerateRules()
     {
-        int nbOfRules = Random.Range(1, LSystem.variables.Length);
         system.rules.Clear();
-        List<Module> variables = new List<Module>(LSystem.variables);
+        int nbOfRules = Random.Range(1, LSystem.variables.Length);
+
+        List<Module> variables = new List<Module>((Module[])LSystem.variables.Clone());
+
         Module[] precursors = new Module[nbOfRules];
         for (int i = 0; i < nbOfRules; i++)
         {
@@ -50,7 +57,7 @@ public class Randomizer : MonoBehaviour
 
             for (int j = 0; j < ruleLength; j++)
             {
-                Module randomModule = LSystem.variables.Random();
+                Module randomModule = new Module(LSystem.variables.Random());
                 for (int k = 0; k < randomModule.parameters.Length; k++)
                 {
                     randomModule.parameters[k] = Random.Range(0f,360f);
@@ -65,6 +72,22 @@ public class Randomizer : MonoBehaviour
 
     }
 
+    bool validate(){
+        
+        foreach (var item in system.rules)
+        {
+            foreach (var module in item.Value)
+            {
+                //just check if the rules output at least get an F
+                if(module.symbol == 'F'){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     IEnumerator Testing()
     {
         while (true)
@@ -73,6 +96,7 @@ public class Randomizer : MonoBehaviour
             Randomize();
             system.Regenerate();
             Camera.main.GetComponent<FitToScreen>().Fit();
+            Debug.Log(system);
             while (!Input.GetKeyDown(KeyCode.Y) && !Input.GetKeyDown(KeyCode.N))
             {
                 yield return null;
